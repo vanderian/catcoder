@@ -1,7 +1,17 @@
-import Equations._
 
-import scala.collection.immutable.HashMap
+object WeekDay extends Enumeration {
+       type WeekDay = Value
+       val Mon, Tue, Wed, Thu, Fri, Sat, Sun = Value
+     }
 
+import WeekDay._
+var v = ValueSet.empty
+v = Mon + Tue
+v = v + Wed
+v - Mon
+val s = "10-10-2"
+s.split('-').mkString
+/*
 val move = HashMap(
   (0, List(0, 6, 9)),
   (1, List(1)),
@@ -40,3 +50,4 @@ val v = for {
 } yield (x, y)
 
 v.mkString(" ")
+*/
