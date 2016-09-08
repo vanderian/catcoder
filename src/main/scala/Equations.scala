@@ -50,23 +50,24 @@ object Equations extends App {
   abstract class OpTree extends Tree {
     val l: Tree
     val r: Tree
+    val op: Int
   }
 
   case class Err(string: String) extends Tree
 
   case class Sum(l: Tree, r: Tree, op: Int = 0) extends OpTree {
-    override def toString = "(" + l + " + " + r + ")"
+    override def toString = s"($l +($op) $r)"
   }
 
   case class Minus(l: Tree, r: Tree, op: Int = 0) extends OpTree {
-    override def toString = "(" + l + " - " + r + ")"
+    override def toString = s"($l -($op) $r)"
   }
 
-  case class Times(l: Tree, r: Tree) extends OpTree {
+  case class Times(l: Tree, r: Tree) extends Tree {
     override def toString = "(" + l + " * " + r + ")"
   }
 
-  case class Divide(l: Tree, r: Tree) extends OpTree {
+  case class Divide(l: Tree, r: Tree) extends Tree {
     override def toString = "(" + l + " / " + r + ")"
   }
 
@@ -80,8 +81,8 @@ object Equations extends App {
   def eval(t: Tree): Int = t match {
     case Sum(l, r, o) => eval(l) + eval(r)
     case Minus(l, r, o) => eval(l) - eval(r)
-    case Times(l, r) => eval(l) * eval(r)
-    case Divide(l, r) => eval(l) / eval(r)
+//    case Times(l, r) => eval(l) * eval(r)
+//    case Divide(l, r) => eval(l) / eval(r)
     //    case Var(n)       => env(n)
     case Const(v, o) => v
   }
@@ -118,7 +119,7 @@ object Equations extends App {
       val m = for {
         x <- generate(l)
         y <- generate(r)
-      } yield Minus(x, y)
+      } yield Minus(x, y, -1)
       s ::: m
     case Minus(l, r, o) =>
       val m = for {
@@ -128,7 +129,7 @@ object Equations extends App {
       val s = for {
         x <- generate(l)
         y <- generate(r)
-      } yield Sum(x, y)
+      } yield Sum(x, y, 2)
       m ::: s
   }
 
@@ -137,7 +138,7 @@ object Equations extends App {
     case x: OpTree =>
       val sl = sum(x.l)
       val sr = sum(x.r)
-      (sl._1 + sr._1, sl._2 + sr._2)
+      (sl._1 + sr._1 + x.op, sl._2 + sr._2 + math.abs(x.op))
   }
 
   def level(eq: String) = {
@@ -155,7 +156,7 @@ object Equations extends App {
       val sl = sum(v._1)
       val sr = sum(v._2)
       sl._1 + sr._1 == 1 && (sl._2 + sr._2 == 1 || sl._2 + sr._2 == 3)
-      //      true
+            true
     })
 
     println(s"${v.mkString(" ")}")
