@@ -11,7 +11,7 @@ object Harvester extends App {
     if (t.r == t.rows) e = 0
     var b = 1
     if (t.c == t.cols) b = 0
-    serp(s, e, t.cols, { r => math.abs(r - t.rows) % 2 == b})
+    serpRow(s, e, t.cols, { r => math.abs(r - t.rows) % 2 == b})
   }).mkString("\n"))
 
   def serpRow(s: Int, e: Int, cols: Int, b: (Int) => Boolean): String = {
