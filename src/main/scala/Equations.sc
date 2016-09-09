@@ -1,20 +1,10 @@
+import Equations._
 
-object WeekDay extends Enumeration {
-       type WeekDay = Value
-       val Mon, Tue, Wed, Thu, Fri, Sat, Sun = Value
-     }
+import scala.collection.immutable.HashMap
 
-import WeekDay._
-var v = ValueSet.empty
-v = Mon + Tue
-v = v + Wed
-v - Mon
-val s = "10-10-2"
-s.split('-').mkString
-/*
 val move = HashMap(
   (0, List(0, 6, 9)),
-  (1, List(1)),
+  (1, List(7, 8)),
   (2, List(2, 3)),
   (3, List(3, 2, 5)),
   (4, List(4)),
@@ -28,26 +18,32 @@ val move = HashMap(
 val t1 = List(1, 2, 3)
 val t2 = List(4, 5)
 
+val i = 1.toString.map(_.asDigit)
+val a = i.map(x => move(x)).zipWithIndex
+  .map(l => l._1
+    .map(n => s"${i.take(l._2).mkString}$n${i.drop(l._2 + 1).mkString}"))
+
+a.flatten
+a.mkString
 //parse("9+2-3-1")
 
-val s = "10-10-2"
-val i = s.lastIndexOf('-')
-s.drop(i+1)
-s.take(i)
+//val s = "10-10-2"
+//val i = s.lastIndexOf('-')
+//s.drop(i+1)
+//s.take(i)
 //s.takeWhile(!_.equals('-'))
-s.dropWhile(!_.equals('-'))
-val l = parse("1+5")
-val r = parse("0")
+//s.dropWhile(!_.equals('-'))
+val l = parse("11+5")
+//val r = parse("0")
 
+//generate(l)
+//generate(l).map(eval)
+//generate(r).map(eval)
 
-generate(l).map(eval)
-generate(r).map(eval)
-
-val v = for {
-  x <- generate(l)
-  y <- generate(r)
-  if eval(x) == eval(y)
-} yield (x, y)
-
-v.mkString(" ")
-*/
+//val v = for {
+//  x <- generate(l)
+//  y <- generate(r)
+//  if eval(x) == eval(y)
+//} yield (x, y)
+//
+//v.mkString(" ")

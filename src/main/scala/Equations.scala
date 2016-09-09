@@ -119,9 +119,16 @@ object Equations extends App {
     case Const(v, o) =>
       val x = math.abs(v)
       val s = math.signum(v)
-      Const(v, o) :: move(x)
-        .map(t => Const(t * s, Op.Add + Op.Remove)) ::: add(x)
-        .map(t => Const(t * s, Op.ValueSet(Op.Add))) ::: remove(x)
+      val i = x.toString.map(_.asDigit)
+
+      def nums(op: (Int) => List[Int]): List[Int] = i.map(x => op(x)).zipWithIndex
+        .flatMap(l => l._1.map(n => s"${i.take(l._2).mkString}$n${i.drop(l._2 + 1).mkString}"))
+        .map(_.toInt)
+        .toList
+
+      Const(v, o) :: nums(x => move(x))
+        .map(t => Const(t * s, Op.Add + Op.Remove)) ::: nums(x => add(x))
+        .map(t => Const(t * s, Op.ValueSet(Op.Add))) ::: nums(x => remove(x))
         .map(t => Const(t * s, Op.ValueSet(Op.Remove)))
     case Sum(l, r, o) =>
       val s = for {
@@ -214,4 +221,15 @@ object Equations extends App {
   println("level5")
   level("8+3=-1")
   level("3-8=5")
+
+  println()
+  println("level6")
+  level("9+8=14")
+  level("14+9=11")
+  level("98-60=-22")
+
+  println()
+  println("level7")
+  level("93+27-30+16=68")
+  level("78+23-89+82=94+2-18")
 }
